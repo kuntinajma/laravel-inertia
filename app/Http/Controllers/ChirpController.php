@@ -40,7 +40,8 @@ class ChirpController extends Controller
     {
         $validated = $request->validate([
             'message' => 'required|string|max:255',
-            'image' => ['sometimes','nullable','image', 'mimes:jpg,jpeg,png', 'max:2048']
+            'image' => ['sometimes','nullable','image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'hashtags' => ['sometimes','nullable', 'string']
         ]);
 
         $createData = [];
@@ -49,6 +50,7 @@ class ChirpController extends Controller
             $createData['image'] = $path;
         }
         $createData['message'] = $validated['message'];
+        $createData['hashtags'] = $validated['hashtags'];
 
         $request->user()->chirps()->create($createData);
 
@@ -80,6 +82,7 @@ class ChirpController extends Controller
 
         $validated = $request->validate([
             'message' => 'required|string|max:255',
+            'hashtags' => ['sometimes', 'nullable','string']
         ]);
 
         $chirp->update($validated);

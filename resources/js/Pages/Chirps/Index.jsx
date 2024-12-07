@@ -14,7 +14,21 @@ export default function Index({ auth, title, user, chirps}) {
     const { data, setData, post, processing, reset, errors } = useForm({
         message: '',
         image: null,
+        hashtags : '',
     });
+
+    const [hashtags, setHashtags] = useState([]);
+
+    const handleKeyPress = (e) => {
+        // Detect space key (code 32)
+        if (e.keyCode === 32 && e.target.value.trim() !== '') {
+            e.preventDefault();
+            const newHashtags = [...hashtags, e.target.value.trim()];
+            setData('hashtags', newHashtags.join('|'));
+            setHashtags(newHashtags);
+            e.target.value = '';
+        }
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -25,28 +39,20 @@ export default function Index({ auth, title, user, chirps}) {
             formData.append('image', data.image);
         }
 
+        formData.append('hastags', data.hastags);
+
         post(route('chirps.store'), {
             data: formData,
             onSuccess: () => {
                 reset();
                 document.getElementById('fileInput').value = '';
                 document.querySelectorAll('trix-editor')[0].value = '';
+                setHashtags([]);
             },
         });
 
     };
 
-    const [hashtags, setHashtags] = useState([]);
-
-    const handleKeyPress = (e) => {
-        // Detect space key (code 32)
-        if (e.keyCode === 32 && e.target.value.trim() !== '') {
-            e.preventDefault();
-            const newHashtags = [...hashtags, e.target.value.trim()];
-            setHashtags(newHashtags);
-            e.target.value = '';
-        }
-    };
     return (
         <AuthenticatedLayout>
             <Head title={title} />

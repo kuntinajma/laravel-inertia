@@ -10,7 +10,8 @@ class Chirp extends Model
 {
     protected $fillable = [
         'message',
-        'image'
+        'image',
+        'hashtags'
     ];
 
 

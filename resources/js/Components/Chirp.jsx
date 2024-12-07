@@ -16,8 +16,20 @@ export default function Chirp({ chirp }) {
 
     const { data, setData, patch, clearErrors, reset, errors } = useForm({
         message: chirp.message,
+        hashtags : chirp.hastags,
     });
 
+    const [hashtags, setHashtags] = useState(chirp.hashtags ? chirp.hashtags.split('|') : []);
+    const handleKeyPress = (e) => {
+        // Detect space key (code 32)
+        if (e.keyCode === 32 && e.target.value.trim() !== '') {
+            e.preventDefault();
+            const newHashtags = [...hashtags, e.target.value.trim()];
+            setData('hashtags', newHashtags.join('|'));
+            setHashtags(newHashtags);
+            e.target.value = '';
+        }
+    };
     const submit = (e) => {
         e.preventDefault();
         patch(route('chirps.update', chirp.id), { onSuccess: () => setEditing(false) });
@@ -111,6 +123,14 @@ export default function Chirp({ chirp }) {
                             </div>
                     </div>
                 }
+
+                <div className="mt-2">
+                    {hashtags.map((hashtag, index) => (
+                        <span key={index} className="inline-block bg-blue-500 text-white rounded-full py-1 px-3 text-sm mr-2 mb-2">
+                            #{hashtag}
+                        </span>
+                    ))}
+                </div>
             </div>
         </div>
     );
