@@ -36,6 +36,17 @@ export default function Index({ auth, title, user, chirps}) {
 
     };
 
+    const [hashtags, setHashtags] = useState([]);
+
+    const handleKeyPress = (e) => {
+        // Detect space key (code 32)
+        if (e.keyCode === 32 && e.target.value.trim() !== '') {
+            e.preventDefault();
+            const newHashtags = [...hashtags, e.target.value.trim()];
+            setHashtags(newHashtags);
+            e.target.value = '';
+        }
+    };
     return (
         <AuthenticatedLayout>
             <Head title={title} />
@@ -55,6 +66,22 @@ export default function Index({ auth, title, user, chirps}) {
                         onChange={handleContentChange}
                     />
                     <InputError message={errors.message} className="mt-2" />
+                    <div className="mt-4 flex flex-row justify-start items-center">
+                        <label className="block mr-4 font-medium">Hashtags:</label>
+                        <input
+                            className="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                            type="text"
+                            onKeyDown={handleKeyPress}
+                            placeholder="Type hashtags separated by space"
+                        />
+                    </div>
+                    <div className="mt-2">
+                        {hashtags.map((hashtag, index) => (
+                            <span key={index} className="inline-block bg-blue-500 text-white rounded-full py-1 px-3 text-sm mr-2 mb-2">
+                                #{hashtag}
+                            </span>
+                        ))}
+                    </div>
                     <PrimaryButton className="mt-4" disabled={processing}>Chirp</PrimaryButton>
                 </form>
                 <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
