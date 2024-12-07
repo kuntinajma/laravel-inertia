@@ -30,6 +30,12 @@ export default function Index({ auth, title, user, chirps}) {
         }
     };
 
+    // Delete hashtag on click
+    const handleDeleteHashtag = (index) => {
+        const updatedHashtags = hashtags.filter((_, i) => i !== index);
+        setHashtags(updatedHashtags);
+    };
+
     const submit = (e) => {
         e.preventDefault();
 
@@ -81,10 +87,15 @@ export default function Index({ auth, title, user, chirps}) {
                             placeholder="Type hashtags separated by space"
                         />
                     </div>
+
                     <div className="mt-2">
                         {hashtags.map((hashtag, index) => (
-                            <span key={index} className="inline-block bg-blue-500 text-white rounded-full py-1 px-3 text-sm mr-2 mb-2">
-                                #{hashtag}
+                            <span
+                                key={index}
+                                className="inline-block bg-blue-500 text-white rounded-full py-1 px-3 text-sm mr-2 mb-2"
+                                onClick={() => handleDeleteHashtag(index)}
+                            >
+                                #{hashtag} <span className="ml-2">&#10005;</span>
                             </span>
                         ))}
                     </div>

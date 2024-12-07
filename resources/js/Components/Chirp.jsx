@@ -12,6 +12,8 @@ dayjs.extend(relativeTime);
 export default function Chirp({ chirp }) {
     const { auth } = usePage().props;
 
+    const originalHashtags = chirp.hashtags ? chirp.hashtags.split('|') : [];
+
     const [editing, setEditing] = useState(false);
 
     const { data, setData, patch, clearErrors, reset, errors } = useForm({
@@ -19,7 +21,7 @@ export default function Chirp({ chirp }) {
         hashtags : chirp.hastags,
     });
 
-    const [hashtags, setHashtags] = useState(chirp.hashtags ? chirp.hashtags.split('|') : []);
+    const [hashtags, setHashtags] = useState(originalHashtags);
     const handleKeyPress = (e) => {
         // Detect space key (code 32)
         if (e.keyCode === 32 && e.target.value.trim() !== '') {
@@ -30,6 +32,13 @@ export default function Chirp({ chirp }) {
             e.target.value = '';
         }
     };
+
+     // Delete hashtag on click
+      const handleDeleteHashtag = (index) => {
+        const updatedHashtags = hashtags.filter((_, i) => i !== index);
+        setHashtags(updatedHashtags);
+      };
+
     const submit = (e) => {
         e.preventDefault();
         patch(route('chirps.update', chirp.id), { onSuccess: () => setEditing(false) });
@@ -56,6 +65,7 @@ export default function Chirp({ chirp }) {
     const cancelEditing = () => {
         setEditing(false);
         reset({ message: chirp.message });
+        setHashtags(originalHashtags);
         clearErrors();
     };
 
@@ -98,39 +108,63 @@ export default function Chirp({ chirp }) {
                                 <TextEditor initialValue={chirp.message} onChange={handleContentChange} className="overflow-auto" />
                             </div>
                             <InputError message={errors.message} className="mt-2" />
+                            <div className="mt-2">
+                                {hashtags.map((hashtag, index) => (
+                                    <span
+                                        key={index}
+                                        className="inline-block bg-blue-500 text-white rounded-full py-1 px-3 text-sm mr-2 mb-2"
+                                        onClick={() => handleDeleteHashtag(index)}
+                                    >
+                                        #{hashtag} <span className="ml-2">&#10005;</span>
+                                    </span>
+                                ))}
+                            </div>
+                            <div className="mt-4 flex flex-row justify-start items-center">
+                                <label className="block mr-4 font-medium">Hashtags:</label>
+                                <input
+                                    className="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                                    type="text"
+                                    onKeyDown={handleKeyPress}
+                                    placeholder="Type hashtags separated by space"
+                                />
+                            </div>
                             <div className="space-x-2">
                                 <PrimaryButton className="mt-4">Save</PrimaryButton>
                                 <button className="mt-4" onClick={cancelEditing}>Cancel</button>
                             </div>
                         </form>
                     </div>
-                    : <div className='mt-4 flex flex-row justify-start items-center'>
-                            {chirp.image && (
-                                <img
-                                    src={`/storage/${chirp.image}`}
-                                    alt="Chirp"
-                                    className='w-24 h-24 mr-4 cover'
-                                />
-                            )}
-                            <div className='flex justify-center flex-col'>
-                                <span id="empty-toolbar"></span>
-                                <trix-editor
-                                    ref={trixInput}
-                                    class="trix-editor w-full h-full border-none"
-                                    readonly
-                                    toolbar="empty-toolbar"
-                                />
+                    :   <div className='mt-4 flex flex-col justify-start items-start'>
+                            <div className='flex flex-row justify-start items-center'>
+                                {chirp.image && (
+                                    <img
+                                        src={`/storage/${chirp.image}`}
+                                        alt="Chirp"
+                                        className='w-24 h-24 mr-4 cover'
+                                    />
+                                )}
+                                <div className='flex justify-center flex-col'>
+                                    <span id="empty-toolbar"></span>
+                                    <trix-editor
+                                        ref={trixInput}
+                                        class="trix-editor w-full h-full border-none"
+                                        readonly
+                                        toolbar="empty-toolbar"
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-1">
+                                {hashtags.map((hashtag, index) => (
+                                    <span
+                                        key={index}
+                                        className="inline-block bg-blue-500 text-white rounded-full py-1 px-3 text-sm mr-2 mb-2"
+                                    >
+                                        #{hashtag}
+                                    </span>
+                                ))}
                             </div>
                     </div>
                 }
-
-                <div className="mt-2">
-                    {hashtags.map((hashtag, index) => (
-                        <span key={index} className="inline-block bg-blue-500 text-white rounded-full py-1 px-3 text-sm mr-2 mb-2">
-                            #{hashtag}
-                        </span>
-                    ))}
-                </div>
             </div>
         </div>
     );
