@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ChirpController extends Controller
 {
@@ -41,16 +42,16 @@ class ChirpController extends Controller
             'message' => 'required|string|max:255',
             'image' => ['sometimes','nullable','image', 'mimes:jpg,jpeg,png', 'max:2048']
         ]);
-        
+
         $createData = [];
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('chirps', 'public'); // Simpan gambar
             $createData['image'] = $path;
         }
         $createData['message'] = $validated['message'];
-    
+
         $request->user()->chirps()->create($createData);
- 
+
         return redirect(route('chirps.index'));
     }
 
@@ -76,13 +77,13 @@ class ChirpController extends Controller
     public function update(Request $request, Chirp $chirp): RedirectResponse
     {
         Gate::authorize('update', $chirp);
- 
+
         $validated = $request->validate([
             'message' => 'required|string|max:255',
         ]);
- 
+
         $chirp->update($validated);
- 
+
         return redirect(route('chirps.index'));
     }
 
@@ -92,9 +93,13 @@ class ChirpController extends Controller
     public function destroy(Chirp $chirp): RedirectResponse
     {
         Gate::authorize('delete', $chirp);
- 
+
+        $path = $chirp->image;
+        if ($path && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
         $chirp->delete();
- 
+
         return redirect(route('chirps.index'));
     }
 }
