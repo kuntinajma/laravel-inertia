@@ -8,17 +8,23 @@ class TextEditor extends React.Component {
     }
 
     componentDidMount() {
+        if (this.trixInput.current) {
+            this.trixInput.current.editor.loadHTML(this.props.initialValue || '');
+        }
+
+        // Listen for changes in Trix editor
         this.trixInput.current.addEventListener("trix-change", event => {
-            console.log("trix change event fired");
-            this.props.onChange(event.target.innerHTML); //calling custom event
+            this.props.onChange(event.target.innerHTML);
         });
     }
 
     render() {
         return (
-            <div className="w-full max-w-3xl mx-auto mt-4">
-                <input type="hidden" id="trix" value={this.props.value} />
-                <trix-editor input="trix" ref={this.trixInput} className="trix-editor border-none focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <div className="mx-auto mt-4 flex flex-col overflow-auto">
+                <trix-editor
+                    ref={this.trixInput}
+                    class="trix-editor overflow-auto mt-4 h-60 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                />
             </div>
         );
     }
