@@ -61,29 +61,4 @@ class RegisteredUserController extends Controller
         // menampilkan halaman update user
         return Inertia::render('Auth/Update');
     }
-
-    // ini untuk update data user
-    public function update(string $id, Request $request)
-    {
-        $user = User::findOrFail($id);
-
-        $rules = [
-            'name' => 'sometimes|nullable|string|max:255',
-            'password' => ['sometimes', 'nullable', Rules\Password::defaults()],
-            'is_active' => ['sometimes', 'nullable', 'boolean']
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-        // ambil data request yang VALID/lolos validasi diatas
-        $validated = $validator->valid();
-
-        // melakukan update user
-        $user->update($validated);
-
-        return redirect(route('dashboard', absolute: false));
-    }
 }
