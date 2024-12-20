@@ -26,7 +26,14 @@ export default function Index({ auth, title, all_user }) {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.email}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.total_chirps}</td>
-                                        <td></td>
+                                        <td>
+                                            <Link
+                                                href={route('users.edit', user.id)}
+                                                className="text-yellow-600 hover:text-yellow-900 mr-2"
+                                            >
+                                                Edit
+                                            </Link>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -1,0 +1,91 @@
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import InputError from '@/Components/InputError';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { Head, useForm } from '@inertiajs/react';
+
+export default function EditUser({ edit_user }) {
+    const { data, setData, put, processing, errors } = useForm({
+        name: edit_user.name,
+        password: '',
+    });
+
+    const submit = (e) => {
+        e.preventDefault();
+
+        put(route('users.update', edit_user.id), {
+            preserveScroll: true,
+        });
+    };
+
+    return (
+        <AuthenticatedLayout>
+            <Head title="Edit User" />
+
+            <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
+                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="p-6 bg-white border-b border-gray-200">
+                        <h1 className="text-xl font-semibold mb-4">Edit User</h1>
+                        <form onSubmit={submit}>
+                            {/* Email Field (Disabled) */}
+                            <div className="mb-4">
+                                <InputLabel htmlFor="email" value="Email" />
+
+                                <TextInput
+                                    id="email"
+                                    type="email"
+                                    name="email"
+                                    value={edit_user.email} 
+                                    className="mt-1 block w-full bg-gray-100 cursor-not-allowed"
+                                    disabled 
+                                />
+                            </div>
+
+                            {/* Name Field */}
+                            <div className="mb-4">
+                                <InputLabel htmlFor="name" value="Name" />
+
+                                <TextInput
+                                    id="name"
+                                    type="text"
+                                    name="name"
+                                    value={data.name}
+                                    className="mt-1 block w-full"
+                                    onChange={(e) => setData('name', e.target.value)}
+                                    autoComplete="name"
+                                    isFocused={true}
+                                />
+
+                                <InputError message={errors.name} className="mt-2" />
+                            </div>
+
+                            {/* Password Field */}
+                            <div className="mb-4">
+                                <InputLabel htmlFor="password" value="Password" />
+
+                                <TextInput
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    value={data.password}
+                                    className="mt-1 block w-full"
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    autoComplete="new-password"
+                                />
+
+                                <InputError message={errors.password} className="mt-2" />
+                            </div>
+
+                            <div className="flex items-center justify-end">
+                                <PrimaryButton className="ml-4" disabled={processing}>
+                                    Save
+                                </PrimaryButton>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </AuthenticatedLayout>
+    );
+}

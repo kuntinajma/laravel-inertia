@@ -31,7 +31,7 @@ Route::resource('chirps', ChirpController::class)
     ->middleware(['auth']);
 
 Route::resource('users', UserController::class)
-    ->only(['index', 'store', 'update', 'destroy'])
+    ->only(['index', 'store', 'edit', 'update', 'destroy'])
     ->middleware(['auth']);
     
 
