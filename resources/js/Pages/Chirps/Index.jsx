@@ -109,7 +109,7 @@ export default function Index({ auth, title, user, chirps}) {
                     {chirps.map(chirp =>
                         <Chirp key={chirp.id} chirp={chirp} />
                     )}
- gg               </div>
+                </div>
             </div>
         </AuthenticatedLayout>
     );
