@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with('roles')->get();
 
         $allUser = $users->map(function (User $user) {
             $user->total_chirps = $user->chirps()->count();
@@ -58,10 +59,16 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $user->load('roles');
+
+        // Ambil semua role yang tersedia
+        $roles = Role::all();
+
         return Inertia::render('Users/Edit', [
             'user' => Auth::user(),
             'title' => 'User Management',
             'edit_user' => $user,
+            'roles' => $roles,
         ]);
     }
 
@@ -74,7 +81,9 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'password' => 'nullable|string|min:8', // Password bersifat opsional
-            'is_active' => 'required|boolean'
+            'is_active' => 'required|boolean',
+            'role_ids' => 'required|array',
+            'role_ids.*' => 'exists:roles,id',
         ]);
 
         // Update name
@@ -87,6 +96,9 @@ class UserController extends Controller
 
         // Update is_active
         $user->is_active = $validated['is_active'];
+
+        // Sync roles user
+        $user->roles()->sync($validated['role_ids']);
     
         // Simpan perubahan ke database
         $user->save();

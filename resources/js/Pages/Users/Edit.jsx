@@ -5,14 +5,18 @@ import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function EditUser({ edit_user }) {
+export default function EditUser({ edit_user, roles }) {
     const { data, setData, put, processing, errors } = useForm({
         name: edit_user.name,
         password: '',
         is_active: edit_user.is_active,
+        role_ids: edit_user.roles ? edit_user.roles.map(role => role.id) : [], 
     });
 
-    console.log(data);
+    const handleRoleChange = (e) => {
+        const selectedRoles = Array.from(e.target.selectedOptions, (option) => option.value);
+        setData('role_ids', selectedRoles);
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -94,6 +98,26 @@ export default function EditUser({ edit_user }) {
                                 >
                                     {data.is_active ? 'Active' : 'Non Active'}
                                 </button>
+                            </div>
+
+                            {/* Roles */}
+                            <div>
+                                <label htmlFor="roles" className="block text-sm font-medium text-gray-700">Roles</label>
+                                <select
+                                    id="roles"
+                                    name="roles"
+                                    multiple
+                                    value={data.role_ids}
+                                    onChange={handleRoleChange}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                >
+                                    {roles.map((role) => (
+                                        <option key={role.id} value={role.id}>
+                                            {role.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.role_ids && <span className="text-red-600 text-sm">{errors.role_ids}</span>}
                             </div>
 
 

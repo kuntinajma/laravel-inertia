@@ -25,6 +25,7 @@ export default function Index({ auth, title, all_user }) {
                                     <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Name</th>
                                     <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Email</th>
                                     <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Status</th>
+                                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Roles</th>
                                     <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Total Chirps</th>
                                     <th className="px-6 py-3 text-center text-sm font-medium text-gray-500 uppercase">Actions</th>
                                 </tr>
@@ -41,6 +42,12 @@ export default function Index({ auth, title, all_user }) {
                                                 <span className="text-red-500">Non Active</span>
                                             )}
                                         </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {user.roles && user.roles.length > 0
+                                                ? user.roles.map((role) => role.name).join(', ') // Menggunakan join untuk menggabungkan role jika ada lebih dari satu
+                                                : 'No roles assigned'}
+                                        </td>
+
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.total_chirps}</td>
                                         <td>
                                             <Link
