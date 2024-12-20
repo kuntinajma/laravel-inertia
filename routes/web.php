@@ -32,7 +32,7 @@ Route::resource('chirps', ChirpController::class)
 
 Route::resource('users', UserController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy'])
-    ->middleware(['auth']);
+    ->middleware(['auth', 'is-admin']);
     
 
 require __DIR__.'/auth.php';
