@@ -56,4 +56,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+    
+    // routes untuk update data user
+    Route::get('/users/{id}/edit', [RegisteredUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{id}', [RegisteredUserController::class, 'update'])->name('users.update');
 });

@@ -26,16 +26,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -48,6 +38,18 @@ class User extends Authenticatable
             'is_active' => 'boolean'
         ];
     }
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    
     public function chirps(): HasMany
     {
         return $this->hasMany(Chirp::class);
