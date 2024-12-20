@@ -2,6 +2,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Index({ auth, title, all_user }) {
+    const { delete: destroy } = useForm();
+
+    const handleDelete = (id) => {
+        if (confirm('Are you sure you want to delete this user?')) {
+            destroy(route('users.destroy', id));
+        }
+    };
+
     return (
         <AuthenticatedLayout>
             <Head title={title} />
@@ -41,6 +49,12 @@ export default function Index({ auth, title, all_user }) {
                                             >
                                                 Edit
                                             </Link>
+                                            <button
+                                                onClick={() => handleDelete(user.id)}
+                                                className="text-red-600 hover:text-red-900"
+                                            >
+                                                Delete
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
