@@ -74,6 +74,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'password' => 'nullable|string|min:8', // Password bersifat opsional
+            'is_active' => 'required|boolean'
         ]);
 
         // Update name
@@ -84,6 +85,9 @@ class UserController extends Controller
             $user->password = Hash::make($validated['password']);
         }
 
+        // Update is_active
+        $user->is_active = $validated['is_active'];
+    
         // Simpan perubahan ke database
         $user->save();
 

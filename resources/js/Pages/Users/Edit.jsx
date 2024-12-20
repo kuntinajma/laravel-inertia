@@ -9,7 +9,10 @@ export default function EditUser({ edit_user }) {
     const { data, setData, put, processing, errors } = useForm({
         name: edit_user.name,
         password: '',
+        is_active: edit_user.is_active,
     });
+
+    console.log(data);
 
     const submit = (e) => {
         e.preventDefault();
@@ -76,6 +79,23 @@ export default function EditUser({ edit_user }) {
 
                                 <InputError message={errors.password} className="mt-2" />
                             </div>
+
+                            {/* Is Active Toggle */}
+                            <div className="mb-4 flex items-center">
+                                <InputLabel htmlFor="is_active" value="Status" />
+                                <button
+                                    type="button"
+                                    onClick={() => setData('is_active', !data.is_active)}
+                                    className={`ml-4 px-4 py-2 rounded-md ${
+                                        data.is_active
+                                            ? 'bg-green-500 text-white'
+                                            : 'bg-red-500 text-white'
+                                    }`}
+                                >
+                                    {data.is_active ? 'Active' : 'Non Active'}
+                                </button>
+                            </div>
+
 
                             <div className="flex items-center justify-end">
                                 <PrimaryButton className="ml-4" disabled={processing}>
