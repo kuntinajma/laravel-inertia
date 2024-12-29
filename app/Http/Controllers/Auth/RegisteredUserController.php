@@ -9,7 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -40,6 +42,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'is_active' => true,
         ]);
 
         event(new Registered($user));
@@ -47,5 +50,15 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    // ini untuk menampilkan halaman edit user
+    public function edit(string $id)
+    {
+        // ambil data user berdasarkan id
+        $user = User::findOrFail($id);
+
+        // menampilkan halaman update user
+        return Inertia::render('Auth/Update');
     }
 }

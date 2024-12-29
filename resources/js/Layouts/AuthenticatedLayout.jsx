@@ -11,6 +11,9 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    // Cek apakah user memiliki role admin
+    const isAdmin = user.roles && user.roles.some(role => role.name === 'admin');
+
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="border-b border-gray-100 bg-white">
@@ -36,6 +39,15 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Chirps
                                 </NavLink>
+
+                                {isAdmin && (
+                                    <NavLink
+                                        href={route('users.index')}
+                                        active={route().current('users.index')}
+                                    >
+                                        Users
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -146,6 +158,16 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Chirps
                         </ResponsiveNavLink>
+
+                        {isAdmin && (
+                            <ResponsiveNavLink
+                                href={route('users.index')}
+                                active={route().current('users.index')}
+                            >
+                                Users
+                            </ResponsiveNavLink>
+                        )}
+
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
