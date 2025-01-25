@@ -37,7 +37,11 @@ class ChirpPolicy
      */
     public function update(User $user, Chirp $chirp): bool
     {
-        return $chirp->user()->is($user);
+        $isAdmin = $user->roles->contains(function ($role) {
+            return $role->name === 'admin';
+        });
+
+        return $isAdmin || $chirp->user()->is($user);
     }
 
     /**
@@ -53,7 +57,7 @@ class ChirpPolicy
      */
     public function restore(User $user, Chirp $chirp): bool
     {
-        return false;
+        return $this->update($user, $chirp);
     }
 
     /**
@@ -61,6 +65,6 @@ class ChirpPolicy
      */
     public function forceDelete(User $user, Chirp $chirp): bool
     {
-        return false;
+        return $this->update($user, $chirp);
     }
 }
