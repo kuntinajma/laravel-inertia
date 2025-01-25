@@ -53,8 +53,14 @@ class StatisticController extends Controller
 
         // panggil function untuk mengambil tanggal 7 hari terakhir
         $getLastWeekData = $this->getLastWeek();
-        $startDate = $getLastWeekData['start_date'];
-        $endDate = $getLastWeekData['end_date'];
+
+        if($startDate == null) {
+            $startDate = $getLastWeekData['start_date'];
+        }
+
+        if($endDate == null) {
+            $endDate = $getLastWeekData['end_date'];
+        }
 
         // QUERY BUILDER
         // untuk mengambil data user
@@ -150,8 +156,14 @@ class StatisticController extends Controller
         
         // panggil function untuk mengambil tanggal 7 hari terakhir
         $getLastWeekData = $this->getLastWeek();
-        $startDate = $getLastWeekData['start_date'];
-        $endDate = $getLastWeekData['end_date'];
+        
+        if($startDate == null) {
+            $startDate = $getLastWeekData['start_date'];
+        }
+
+        if($endDate == null) {
+            $endDate = $getLastWeekData['end_date'];
+        }
 
         $query = Report::query();
         if($startDate) {
@@ -179,7 +191,7 @@ class StatisticController extends Controller
     private function getLastWeek()
     {
         $today = Carbon::today(); // Tanggal hari ini
-        $last7Days = $today->subDays(6); // 7 hari terakhir (hari ini - 6 hari)
+        $last7Days = Carbon::today()->subDays(6); // 7 hari terakhir (hari ini - 6 hari)
 
         return [
             'start_date' => $last7Days->toDateString(), // Format: YYYY-MM-DD
