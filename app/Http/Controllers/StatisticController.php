@@ -7,9 +7,19 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class StatisticController extends Controller
 {
+
+    public function index()
+    {
+        return Inertia::render('Admin/Statistics/Index',[
+            'user' => Auth::user(),
+            'title' => 'Belajar Laravel Bootcamp Inertia - Najma',
+        ]);
+    }
     
     /*
     DATABASE QUERY BUILDER

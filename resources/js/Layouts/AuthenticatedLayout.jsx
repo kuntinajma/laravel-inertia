@@ -66,6 +66,15 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Reports Management
                                     </NavLink>
                                 )}
+
+                                {isAdmin && (
+                                    <NavLink
+                                        href={route('admin.statistics')}
+                                        active={route().current('admin.statistics')}
+                                    >
+                                        Statistics
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -199,6 +208,15 @@ export default function AuthenticatedLayout({ header, children }) {
                             <ResponsiveNavLink
                                 href={route('admin.reports.index')}
                                 active={route().current('admin.reports.index')}
+                            >
+                                Reports Management
+                            </ResponsiveNavLink>
+                        )}
+
+                        {isAdmin && (
+                            <ResponsiveNavLink
+                                href={route('admin.statistics')}
+                                active={route().current('admin.statistics')}
                             >
                                 Reports Management
                             </ResponsiveNavLink>

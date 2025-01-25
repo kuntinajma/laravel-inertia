@@ -45,6 +45,7 @@ Route::group([
 
     Route::resource('chirps', \App\Http\Controllers\Admin\ChirpController::class);
     Route::resource('reports', \App\Http\Controllers\Admin\ReportController::class);
+    Route::get('/statistics', [StatisticController::class, 'index'])->name('statistics');
 });
 
 
