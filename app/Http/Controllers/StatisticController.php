@@ -117,7 +117,7 @@ class StatisticController extends Controller
     }
 
     // function get chrips
-    public function getChripStatistics(Request $request)
+    public function getChirpStatistics(Request $request)
     {
         // querystring
         $startDate = $request->query('start_date', null);
@@ -153,18 +153,14 @@ class StatisticController extends Controller
         $startDate = $request->query('start_date', null);
         $endDate = $request->query('end_date', null);
         $isResolved = $request->query('is_resolved', null);
-        
         // panggil function untuk mengambil tanggal 7 hari terakhir
         $getLastWeekData = $this->getLastWeek();
-        
         if($startDate == null) {
             $startDate = $getLastWeekData['start_date'];
         }
-
         if($endDate == null) {
             $endDate = $getLastWeekData['end_date'];
         }
-
         $query = Report::query();
         if($startDate) {
             $query->where('created_at', '>=', $startDate);
