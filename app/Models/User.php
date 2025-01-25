@@ -14,6 +14,9 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+
+    protected $with = ['roles'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -50,7 +53,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    
+
     public function chirps(): HasMany
     {
         return $this->hasMany(Chirp::class);

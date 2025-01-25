@@ -33,6 +33,17 @@ Route::resource('chirps', ChirpController::class)
 Route::resource('users', UserController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy'])
     ->middleware(['auth', 'is-admin']);
-    
+
+
+Route::group([
+    'middleware' => ['auth', 'is-admin'],
+    'prefix' => 'admin',
+    'as' => 'admin.'
+],function() {
+    Route::put('/reports/update-user-status/{userId}', [\App\Http\Controllers\Admin\ReportController::class, 'updateUserStatus'])->name('reports.update-user-status');
+
+    Route::resource('chirps', \App\Http\Controllers\Admin\ChirpController::class);
+    Route::resource('reports', \App\Http\Controllers\Admin\ReportController::class);
+});
 
 require __DIR__.'/auth.php';
