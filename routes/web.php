@@ -57,7 +57,7 @@ Route::group([
  * prefix -> fungsinya menambahkan path didepan routes yang ada di groupnya
  * misal prefix => 'statistics'
  * maka di routes /users -> outpoutnya jadi '/statistics/users';
- * 
+ *
  * as -> fungsinya untuk menambahan prefix pada nama routes.
  * misal as => 'statistics.'
  * maka route name('users') namanya menjadi 'statistics.users'

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ReportCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,6 +17,11 @@ class Report extends Model
 
     protected $casts = [
         'is_resolved' => 'boolean'
+    ];
+
+
+    protected $dispatchesEvents = [
+        'created' => ReportCreated::class,
     ];
 
     public function user() : BelongsTo
